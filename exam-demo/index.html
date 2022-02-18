@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/bootstrap@3.3.5/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/font-awesome@4.4.0/css/font-awesome.min.css"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <div id="app">
+      <nav class="container">
+        <h1 class="pull-left">獨立音樂活動清單</h1>
+
+        <div class="pull-left tabs">
+          <!-- 不同的分頁 -->
+          <span class="glyphicon glyphicon-th-large"></span>
+          <span class="glyphicon glyphicon-star" @click=" control.tab = 'star' "></span>
+        </div>
+
+        <div class="pull-right">
+          <!-- 不同的過濾器 -->
+          <span class="glyphicon glyphicon-time"></span>
+          <span class="glyphicon glyphicon-tag"></span>
+          <input type="text" placeholder="過濾器" />
+        </div>
+      </nav>
+
+      <main class="container">
+        <div class="items">
+          <article class="item" v-for="object in current_activities">
+            <header>
+              <h1>{{object.title}}</h1>
+              <div class="animation-swipe star" :class="{favorite:favorite[object.uid] }" @click="addStar(object)">
+                <span class="glyphicon glyphicon-star"></span>
+              </div>
+            </header>
+
+            <dl>
+              <dt>時間</dt>
+              <dd>{{object.time}}</dd>
+            </dl>
+
+            <dl>
+              <dt>價錢</dt>
+              <dd>{{object.price}}</dd>
+            </dl>
+
+            <dl>
+              <dt>地點</dt>
+              <dd>{{object.address}}</dd>
+            </dl>
+          </article>
+        </div>
+      </main>
+
+      <footer class="container">
+        <span v-if="activityObjectArr && activityObjectArr.length">目前資料總價: {{ total }}</span>
+        <span v-else>目前還沒有資料。</span>
+      </footer>
+    </div>
+
+    <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/bootstrap@3.3.5/dist/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+      $.getJSON("./show.min.json", function (json) { //取得JSON固定用法
+          console.log(json);
+        window.app = Vue.createApp({
+            data() {
+            return {
+              activityObjectArr: json,
+              favorite : {},
+              control: {
+                filter: "",
+                sort: "",
+                tab:"all"
+              }
+            };
+          },
+          methods: {
+            addStar: function (object) {
+                this.favorite[object.uid] = this.favorite[object.uid] ? false : true; 
+                console.log(this.favorite);
+            },
+            },
+          computed: {
+            current_activities: function () {
+                var x = this;
+                var current =[];
+                console.log(x);
+                console.log(current);
+
+                switch(x.control.tab){
+                    case "all" : 
+                        current = x.activityObjectArr;
+                        break;
+                    case "star" :
+                        current = x.activityObjectArr.filter(function(object) {
+                             return x.favorite[object.uid];
+                        })
+                }
+                return current;
+            },
+
+            total: function () {
+                var sum= 0;
+                for(var i=0; i<this.current_activities.length; i++) {
+                    sum += this.current_activities[i].price;}
+                return sum;
+                },
+          }
+        }).mount("#app");
+        // var footer = Vue.createApp({
+        //     data() {
+        //         return {
+        //             seen:false
+        //         }
+        //     }
+        // });
+      });
+    </script>
+  </body>
+</html>

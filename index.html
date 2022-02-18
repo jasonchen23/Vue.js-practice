@@ -12,7 +12,7 @@
 
   </head>
   <body>
-    <div id="app" data-name="" class="">
+    <div id="app" data-name="">
         Hi, {{ last + name }}
 
         <a v-bind:title="titleTxt" href="#">click</a>
@@ -22,6 +22,10 @@
         <p v-for="comment in comments">
             用戶名稱：{{comment.user}} 留言：{{comment.text}}
         </p>
+        <button @click="add($event,1)">Add 1</button>
+        <p>The button above has been clicked {{ counter }} times.</p>
+        <p> {{fullname}}</p>
+        <p> {{last + name}}</p>
     </div>
     <div id="app-4" class="d-flex">
         <ol>
@@ -30,10 +34,19 @@
             </li>
         </ol>
     </div>
-    <div id="app-2" v-for="( item, index ) in items">
-        {{item}},{{index}}
+    <div id="app-6">
+        <p> {{ message }}</p>
+        <input v-model="message">
     </div>
-
+    <div id="exam-1">
+        <button @click="counter ++">Add 1</button>
+        <p>The button above has been clicked {{ counter }} times.</p>
+    </div>
+    ///
+    <!-- <div id="app-2" v-for="( item, index ) in items">
+        {{item.item}},{{index.index}}44
+    </div> -->
+    ///
     <!-- Bootstrap JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
     <script src="./action.js"></script>
