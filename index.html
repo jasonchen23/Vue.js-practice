@@ -12,12 +12,26 @@
 
   </head>
   <body>
-    <div id="app" data-name="">
+    <div id="app" data-name="" class="">
         Hi, {{ last + name }}
 
         <a v-bind:title="titleTxt" href="#">click</a>
         <br>
-        <img src="" :title="titleTxt" :alt="titleTxt" width="300" height="300">
+        <img v-if="imgScr" :src="imgScr" :title="titleTxt" :alt="titleTxt" width="300" height="300">
+        <br>
+        <p v-for="comment in comments">
+            用戶名稱：{{comment.user}} 留言：{{comment.text}}
+        </p>
+    </div>
+    <div id="app-4" class="d-flex">
+        <ol>
+            <li v-for="todo in todos">
+                {{ todo.text }}
+            </li>
+        </ol>
+    </div>
+    <div id="app-2" v-for="( item, index ) in items">
+        {{item}},{{index}}
     </div>
 
     <!-- Bootstrap JavaScript Libraries -->
