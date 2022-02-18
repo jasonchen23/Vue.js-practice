@@ -21,15 +21,15 @@
 
         <div class="pull-left tabs">
           <!-- 不同的分頁 -->
-          <span class="glyphicon glyphicon-th-large"></span>
+          <span class="glyphicon glyphicon-th-large" @click="control.tab= 'all'"></span>
           <span class="glyphicon glyphicon-star" @click=" control.tab = 'star' "></span>
         </div>
 
         <div class="pull-right">
           <!-- 不同的過濾器 -->
-          <span class="glyphicon glyphicon-time"></span>
-          <span class="glyphicon glyphicon-tag"></span>
-          <input type="text" placeholder="過濾器" />
+          <span class="glyphicon glyphicon-time" @click=" control.sort = 'time' "></span>
+          <span class="glyphicon glyphicon-tag" @click=" control.sort = 'price' "></span>
+          <input type="text" placeholder="過濾器" v-model="control.filter"/>
         </div>
       </nav>
 
@@ -87,7 +87,7 @@
           },
           methods: {
             addStar: function (object) {
-                this.favorite[object.uid] = this.favorite[object.uid] ? false : true; 
+                this.favorite[object.uid] = !this.favorite[object.uid]; 
                 console.log(this.favorite);
             },
             },
@@ -107,6 +107,27 @@
                              return x.favorite[object.uid];
                         })
                 }
+                if (x.control.filter && x.control.filter.length > 0) {
+                  current = current.filter(function(object) {
+                    var search = x.control.filter.toLowerCase();
+                    var title = object.title.toLowerCase();
+                    return title.indexOf(search) > -1; //indexof
+                  })
+                } 
+                switch(x.control.sort){
+                    case "time" :
+                      current = current.sort(function(a,b) {
+                        return a.time.localeCompare(b.time); //localeCompare
+                      });
+                      break;
+                    case "price" :
+                      current = current.sort(function(a,b) {
+                        return parseInt(a.price) - parseInt(b.price); //parseInt
+                      })
+                      break;
+                      default:
+                        break;
+                }
                 return current;
             },
 
@@ -118,6 +139,7 @@
                 },
           }
         }).mount("#app");
+        console.log(app.control);
         // var footer = Vue.createApp({
         //     data() {
         //         return {
